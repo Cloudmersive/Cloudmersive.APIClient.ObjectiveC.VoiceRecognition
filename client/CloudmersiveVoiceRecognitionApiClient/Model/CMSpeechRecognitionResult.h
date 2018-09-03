@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <JSONModel/JSONModel.h>
+#import "CMObject.h"
 
 /**
 * speechapi
@@ -14,6 +14,16 @@
 */
 
 
-@interface CMObject : JSONModel
+
+
+
+@protocol CMSpeechRecognitionResult
+@end
+
+@interface CMSpeechRecognitionResult : CMObject
+
+/* Recognition result in text format [optional]
+ */
+@property(nonatomic) NSString* textResult;
 
 @end

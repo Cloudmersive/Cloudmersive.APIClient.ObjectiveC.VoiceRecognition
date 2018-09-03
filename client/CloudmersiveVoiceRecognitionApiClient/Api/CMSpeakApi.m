@@ -1,19 +1,18 @@
-#import "CMBarcodeLookupApi.h"
+#import "CMSpeakApi.h"
 #import "CMQueryParamCollection.h"
 #import "CMApiClient.h"
-#import "CMBarcodeLookupResponse.h"
 
 
-@interface CMBarcodeLookupApi ()
+@interface CMSpeakApi ()
 
 @property (nonatomic, strong, readwrite) NSMutableDictionary *mutableDefaultHeaders;
 
 @end
 
-@implementation CMBarcodeLookupApi
+@implementation CMSpeakApi
 
-NSString* kCMBarcodeLookupApiErrorDomain = @"CMBarcodeLookupApiErrorDomain";
-NSInteger kCMBarcodeLookupApiMissingParamErrorCode = 234513;
+NSString* kCMSpeakApiErrorDomain = @"CMSpeakApiErrorDomain";
+NSInteger kCMSpeakApiMissingParamErrorCode = 234513;
 
 @synthesize apiClient = _apiClient;
 
@@ -50,28 +49,45 @@ NSInteger kCMBarcodeLookupApiMissingParamErrorCode = 234513;
 #pragma mark - Api Methods
 
 ///
-/// Lookup a barcode value and return product data
-/// 
-///  @param value Barcode value 
+/// Perform text-to-speech on a string
+/// Takes as input a string and a file format (mp3 or wav) and outputs a wave form in the appropriate format.
+///  @param format File format to generate response in; possible values are \"mp3\" or \"wav\" 
 ///
-///  @returns CMBarcodeLookupResponse*
+///  @param text The text you would like to conver to speech.  Be sure to surround with quotes, e.g. \"The quick brown fox jumps over the lazy dog.\" 
 ///
--(NSURLSessionTask*) barcodeLookupEanLookupWithValue: (NSString*) value
-    completionHandler: (void (^)(CMBarcodeLookupResponse* output, NSError* error)) handler {
-    // verify the required parameter 'value' is set
-    if (value == nil) {
-        NSParameterAssert(value);
+///  @returns NSObject*
+///
+-(NSURLSessionTask*) speakPostWithFormat: (NSString*) format
+    text: (NSString*) text
+    completionHandler: (void (^)(NSObject* output, NSError* error)) handler {
+    // verify the required parameter 'format' is set
+    if (format == nil) {
+        NSParameterAssert(format);
         if(handler) {
-            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"value"] };
-            NSError* error = [NSError errorWithDomain:kCMBarcodeLookupApiErrorDomain code:kCMBarcodeLookupApiMissingParamErrorCode userInfo:userInfo];
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"format"] };
+            NSError* error = [NSError errorWithDomain:kCMSpeakApiErrorDomain code:kCMSpeakApiMissingParamErrorCode userInfo:userInfo];
             handler(nil, error);
         }
         return nil;
     }
 
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/barcode/lookup/ean"];
+    // verify the required parameter 'text' is set
+    if (text == nil) {
+        NSParameterAssert(text);
+        if(handler) {
+            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"text"] };
+            NSError* error = [NSError errorWithDomain:kCMSpeakApiErrorDomain code:kCMSpeakApiMissingParamErrorCode userInfo:userInfo];
+            handler(nil, error);
+        }
+        return nil;
+    }
+
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/speech/speak/text/basicVoice/{format}"];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
+    if (format != nil) {
+        pathParams[@"format"] = format;
+    }
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.apiClient.configuration.defaultHeaders];
@@ -94,7 +110,7 @@ NSInteger kCMBarcodeLookupApiMissingParamErrorCode = 234513;
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *localVarFiles = [[NSMutableDictionary alloc] init];
-    bodyParam = value;
+    bodyParam = text;
 
     return [self.apiClient requestWithPath: resourcePath
                                     method: @"POST"
@@ -107,10 +123,10 @@ NSInteger kCMBarcodeLookupApiMissingParamErrorCode = 234513;
                               authSettings: authSettings
                         requestContentType: requestContentType
                        responseContentType: responseContentType
-                              responseType: @"CMBarcodeLookupResponse*"
+                              responseType: @"NSObject*"
                            completionBlock: ^(id data, NSError *error) {
                                 if(handler) {
-                                    handler((CMBarcodeLookupResponse*)data, error);
+                                    handler((NSObject*)data, error);
                                 }
                             }];
 }

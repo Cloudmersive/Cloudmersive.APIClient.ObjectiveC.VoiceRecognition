@@ -4,8 +4,8 @@
 #import "CMSanitizer.h"
 
 /**
-* barcodeapi
-* Barcode APIs let you generate barcode images, and recognize values from images of barcodes.
+* speechapi
+* Speech APIs enable you to recognize speech and convert it to text using advanced machine learning, and also to convert text to speech.
 *
 * OpenAPI spec version: v1
 * 

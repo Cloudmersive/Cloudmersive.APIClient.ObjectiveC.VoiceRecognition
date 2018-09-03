@@ -9,11 +9,11 @@
 
 Pod::Spec.new do |s|
     s.name             = "CloudmersiveVoiceRecognitionApiClient"
-    s.version          = "1.1.2"
+    s.version          = "1.1.3"
 
-    s.summary          = "barcodeapi"
+    s.summary          = "speechapi"
     s.description      = <<-DESC
-                         Barcode APIs let you generate barcode images, and recognize values from images of barcodes.
+                         Speech APIs enable you to recognize speech and convert it to text using advanced machine learning, and also to convert text to speech.
                          DESC
 
     s.platform     = :ios, '7.0'
