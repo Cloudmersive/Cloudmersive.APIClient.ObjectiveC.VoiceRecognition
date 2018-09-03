@@ -1,0 +1,1 @@
+& pod trunk push ./client/CloudmersiveBarcodeApiClient.podspec --allow-warnings
