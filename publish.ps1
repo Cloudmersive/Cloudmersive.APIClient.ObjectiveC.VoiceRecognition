@@ -1,1 +1,1 @@
-& pod trunk push ./client/CloudmersiveBarcodeApiClient.podspec --allow-warnings
+& pod trunk push ./client/CloudmersiveVoiceRecognitionApiClient.podspec --allow-warnings
