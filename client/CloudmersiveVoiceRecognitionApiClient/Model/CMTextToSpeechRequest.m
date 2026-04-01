@@ -1,6 +1,6 @@
-#import "CMSpeechRecognitionResult.h"
+#import "CMTextToSpeechRequest.h"
 
-@implementation CMSpeechRecognitionResult
+@implementation CMTextToSpeechRequest
 
 - (instancetype)init {
   self = [super init];
@@ -17,7 +17,7 @@
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper {
-  return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:@{ @"textResult": @"TextResult", @"timestamps": @"Timestamps" }];
+  return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:@{ @"text": @"Text", @"format": @"Format", @"languageCode": @"LanguageCode", @"gender": @"Gender" }];
 }
 
 /**
@@ -27,7 +27,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName {
 
-  NSArray *optionalProperties = @[@"textResult", @"timestamps"];
+  NSArray *optionalProperties = @[@"text", @"format", @"languageCode", @"gender"];
   return [optionalProperties containsObject:propertyName];
 }
 

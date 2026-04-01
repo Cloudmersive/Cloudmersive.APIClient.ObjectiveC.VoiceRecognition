@@ -1,6 +1,6 @@
-#import "CMSpeechRecognitionResult.h"
+#import "CMTokenTimestamp.h"
 
-@implementation CMSpeechRecognitionResult
+@implementation CMTokenTimestamp
 
 - (instancetype)init {
   self = [super init];
@@ -17,7 +17,7 @@
  * This method is used by `JSONModel`.
  */
 + (JSONKeyMapper *)keyMapper {
-  return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:@{ @"textResult": @"TextResult", @"timestamps": @"Timestamps" }];
+  return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:@{ @"token": @"Token", @"characterOffsetStart": @"CharacterOffsetStart", @"characterOffsetEnd": @"CharacterOffsetEnd", @"startTimeMs": @"StartTimeMs", @"endTimeMs": @"EndTimeMs" }];
 }
 
 /**
@@ -27,7 +27,7 @@
  */
 + (BOOL)propertyIsOptional:(NSString *)propertyName {
 
-  NSArray *optionalProperties = @[@"textResult", @"timestamps"];
+  NSArray *optionalProperties = @[@"token", @"characterOffsetStart", @"characterOffsetEnd", @"startTimeMs", @"endTimeMs"];
   return [optionalProperties containsObject:propertyName];
 }
 

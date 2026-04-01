@@ -42,6 +42,8 @@ Import the following:
 #import <CloudmersiveVoiceRecognitionApiClient/CMDefaultConfiguration.h>
 // load models
 #import <CloudmersiveVoiceRecognitionApiClient/CMSpeechRecognitionResult.h>
+#import <CloudmersiveVoiceRecognitionApiClient/CMTextToSpeechRequest.h>
+#import <CloudmersiveVoiceRecognitionApiClient/CMTokenTimestamp.h>
 // load API classes for accessing endpoints
 #import <CloudmersiveVoiceRecognitionApiClient/CMRecognizeApi.h>
 #import <CloudmersiveVoiceRecognitionApiClient/CMSpeakApi.h>
@@ -66,12 +68,16 @@ CMDefaultConfiguration *apiConfig = [CMDefaultConfiguration sharedConfig];
 //[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"Apikey"];
 
 
-NSURL* *speechFile = [NSURL fileURLWithPath:@"/path/to/file.txt"]; // Speech file to perform the operation on.  Common file formats such as WAV, MP3 are supported.
+NSString* *languageCode = @""; // ISO 639-3 three-letter language code (e.g. eng, spa, fra). Empty for auto-detect. (optional) (default to )
+NSString* *recognitionMode = @"Normal"; // Recognition mode: Fast, Normal (default), or Advanced. Advanced is only available on Private Cloud and Managed Instance deployments. (optional) (default to Normal)
+NSURL* *speechFile = [NSURL fileURLWithPath:@"/path/to/file.txt"]; //  (optional)
 
 CMRecognizeApi *apiInstance = [[CMRecognizeApi alloc] init];
 
-// Recognize audio input as text using machine learning
-[apiInstance recognizeFileWithSpeechFile:speechFile
+// Recognize audio input as text using Advanced AI
+[apiInstance speechRecognizeFilePostWithLanguageCode:languageCode
+    recognitionMode:recognitionMode
+    speechFile:speechFile
               completionHandler: ^(CMSpeechRecognitionResult* output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -85,17 +91,19 @@ CMRecognizeApi *apiInstance = [[CMRecognizeApi alloc] init];
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api.cloudmersive.com*
+All URIs are relative to *https://testapi.cloudmersive.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*CMRecognizeApi* | [**recognizeFile**](docs/CMRecognizeApi.md#recognizefile) | **POST** /speech/recognize/file | Recognize audio input as text using machine learning
-*CMSpeakApi* | [**speakPost**](docs/CMSpeakApi.md#speakpost) | **POST** /speech/speak/text/basicVoice/{format} | Perform text-to-speech on a string
+*CMRecognizeApi* | [**speechRecognizeFilePost**](docs/CMRecognizeApi.md#speechrecognizefilepost) | **POST** /speech/recognize/file | Recognize audio input as text using Advanced AI
+*CMSpeakApi* | [**speechSpeakTextVoiceBasicAudioPost**](docs/CMSpeakApi.md#speechspeaktextvoicebasicaudiopost) | **POST** /speech/speak/text/voice/basic/audio | Generate audio from text using Advanced AI
 
 
 ## Documentation For Models
 
  - [CMSpeechRecognitionResult](docs/CMSpeechRecognitionResult.md)
+ - [CMTextToSpeechRequest](docs/CMTextToSpeechRequest.md)
+ - [CMTokenTimestamp](docs/CMTokenTimestamp.md)
 
 
 ## Documentation For Authorization

@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#import "CMTextToSpeechRequest.h"
 #import "CMApi.h"
 
 /**
@@ -22,18 +23,16 @@ extern NSInteger kCMSpeakApiMissingParamErrorCode;
 
 -(instancetype) initWithApiClient:(CMApiClient *)apiClient NS_DESIGNATED_INITIALIZER;
 
-/// Perform text-to-speech on a string
-/// Takes as input a string and a file format (mp3 or wav) and outputs a wave form in the appropriate format.
+/// Generate audio from text using Advanced AI
+/// Converts text to speech using advanced AI. Supports English, Spanish, French, Hindi, Italian, Japanese, Portuguese, and Chinese. Specify language with LanguageCode (ISO 639-3, default: eng) and gender with Gender (Male or Female, default: Female). Output format is controlled by the Format field (mp3 or wav, default: mp3). Consumes 1 API call per second of generated audio.
 ///
-/// @param format File format to generate response in; possible values are \&quot;mp3\&quot; or \&quot;wav\&quot;
-/// @param text The text you would like to conver to speech.  Be sure to surround with quotes, e.g. \&quot;The quick brown fox jumps over the lazy dog.\&quot;
+/// @param body String input request (optional)
 /// 
 ///  code:200 message:"OK"
 ///
-/// @return NSObject*
--(NSURLSessionTask*) speakPostWithFormat: (NSString*) format
-    text: (NSString*) text
-    completionHandler: (void (^)(NSObject* output, NSError* error)) handler;
+/// @return NSData*
+-(NSURLSessionTask*) speechSpeakTextVoiceBasicAudioPostWithBody: (CMTextToSpeechRequest*) body
+    completionHandler: (void (^)(NSData* output, NSError* error)) handler;
 
 
 

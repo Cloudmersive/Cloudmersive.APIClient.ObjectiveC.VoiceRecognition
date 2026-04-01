@@ -1,6 +1,7 @@
 #import "CMSpeakApi.h"
 #import "CMQueryParamCollection.h"
 #import "CMApiClient.h"
+#import "CMTextToSpeechRequest.h"
 
 
 @interface CMSpeakApi ()
@@ -49,51 +50,23 @@ NSInteger kCMSpeakApiMissingParamErrorCode = 234513;
 #pragma mark - Api Methods
 
 ///
-/// Perform text-to-speech on a string
-/// Takes as input a string and a file format (mp3 or wav) and outputs a wave form in the appropriate format.
-///  @param format File format to generate response in; possible values are \"mp3\" or \"wav\" 
+/// Generate audio from text using Advanced AI
+/// Converts text to speech using advanced AI. Supports English, Spanish, French, Hindi, Italian, Japanese, Portuguese, and Chinese. Specify language with LanguageCode (ISO 639-3, default: eng) and gender with Gender (Male or Female, default: Female). Output format is controlled by the Format field (mp3 or wav, default: mp3). Consumes 1 API call per second of generated audio.
+///  @param body String input request (optional)
 ///
-///  @param text The text you would like to conver to speech.  Be sure to surround with quotes, e.g. \"The quick brown fox jumps over the lazy dog.\" 
+///  @returns NSData*
 ///
-///  @returns NSObject*
-///
--(NSURLSessionTask*) speakPostWithFormat: (NSString*) format
-    text: (NSString*) text
-    completionHandler: (void (^)(NSObject* output, NSError* error)) handler {
-    // verify the required parameter 'format' is set
-    if (format == nil) {
-        NSParameterAssert(format);
-        if(handler) {
-            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"format"] };
-            NSError* error = [NSError errorWithDomain:kCMSpeakApiErrorDomain code:kCMSpeakApiMissingParamErrorCode userInfo:userInfo];
-            handler(nil, error);
-        }
-        return nil;
-    }
-
-    // verify the required parameter 'text' is set
-    if (text == nil) {
-        NSParameterAssert(text);
-        if(handler) {
-            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"text"] };
-            NSError* error = [NSError errorWithDomain:kCMSpeakApiErrorDomain code:kCMSpeakApiMissingParamErrorCode userInfo:userInfo];
-            handler(nil, error);
-        }
-        return nil;
-    }
-
-    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/speech/speak/text/basicVoice/{format}"];
+-(NSURLSessionTask*) speechSpeakTextVoiceBasicAudioPostWithBody: (CMTextToSpeechRequest*) body
+    completionHandler: (void (^)(NSData* output, NSError* error)) handler {
+    NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/speech/speak/text/voice/basic/audio"];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
-    if (format != nil) {
-        pathParams[@"format"] = format;
-    }
 
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.apiClient.configuration.defaultHeaders];
     [headerParams addEntriesFromDictionary:self.defaultHeaders];
     // HTTP header `Accept`
-    NSString *acceptHeader = [self.apiClient.sanitizer selectHeaderAccept:@[@"application/json", @"text/json", @"application/xml", @"text/xml"]];
+    NSString *acceptHeader = [self.apiClient.sanitizer selectHeaderAccept:@[@"application/octet-stream"]];
     if(acceptHeader.length > 0) {
         headerParams[@"Accept"] = acceptHeader;
     }
@@ -102,7 +75,7 @@ NSInteger kCMSpeakApiMissingParamErrorCode = 234513;
     NSString *responseContentType = [[acceptHeader componentsSeparatedByString:@", "] firstObject] ?: @"";
 
     // request content type
-    NSString *requestContentType = [self.apiClient.sanitizer selectHeaderContentType:@[@"application/json", @"text/json", @"application/xml", @"text/xml", @"application/x-www-form-urlencoded"]];
+    NSString *requestContentType = [self.apiClient.sanitizer selectHeaderContentType:@[@"application/json", @"text/json", @"application/_*+json"]];
 
     // Authentication setting
     NSArray *authSettings = @[@"Apikey"];
@@ -110,7 +83,7 @@ NSInteger kCMSpeakApiMissingParamErrorCode = 234513;
     id bodyParam = nil;
     NSMutableDictionary *formParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary *localVarFiles = [[NSMutableDictionary alloc] init];
-    bodyParam = text;
+    bodyParam = body;
 
     return [self.apiClient requestWithPath: resourcePath
                                     method: @"POST"
@@ -123,10 +96,10 @@ NSInteger kCMSpeakApiMissingParamErrorCode = 234513;
                               authSettings: authSettings
                         requestContentType: requestContentType
                        responseContentType: responseContentType
-                              responseType: @"NSObject*"
+                              responseType: @"NSData*"
                            completionBlock: ^(id data, NSError *error) {
                                 if(handler) {
-                                    handler((NSObject*)data, error);
+                                    handler((NSData*)data, error);
                                 }
                             }];
 }

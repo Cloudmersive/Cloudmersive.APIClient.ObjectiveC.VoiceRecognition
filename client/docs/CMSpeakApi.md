@@ -1,22 +1,21 @@
 # CMSpeakApi
 
-All URIs are relative to *https://api.cloudmersive.com*
+All URIs are relative to *https://testapi.cloudmersive.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**speakPost**](CMSpeakApi.md#speakpost) | **POST** /speech/speak/text/basicVoice/{format} | Perform text-to-speech on a string
+[**speechSpeakTextVoiceBasicAudioPost**](CMSpeakApi.md#speechspeaktextvoicebasicaudiopost) | **POST** /speech/speak/text/voice/basic/audio | Generate audio from text using Advanced AI
 
 
-# **speakPost**
+# **speechSpeakTextVoiceBasicAudioPost**
 ```objc
--(NSURLSessionTask*) speakPostWithFormat: (NSString*) format
-    text: (NSString*) text
-        completionHandler: (void (^)(NSObject* output, NSError* error)) handler;
+-(NSURLSessionTask*) speechSpeakTextVoiceBasicAudioPostWithBody: (CMTextToSpeechRequest*) body
+        completionHandler: (void (^)(NSData* output, NSError* error)) handler;
 ```
 
-Perform text-to-speech on a string
+Generate audio from text using Advanced AI
 
-Takes as input a string and a file format (mp3 or wav) and outputs a wave form in the appropriate format.
+Converts text to speech using advanced AI. Supports English, Spanish, French, Hindi, Italian, Japanese, Portuguese, and Chinese. Specify language with LanguageCode (ISO 639-3, default: eng) and gender with Gender (Male or Female, default: Female). Output format is controlled by the Format field (mp3 or wav, default: mp3). Consumes 1 API call per second of generated audio.
 
 ### Example 
 ```objc
@@ -28,20 +27,18 @@ CMDefaultConfiguration *apiConfig = [CMDefaultConfiguration sharedConfig];
 //[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"Apikey"];
 
 
-NSString* format = @"format_example"; // File format to generate response in; possible values are \"mp3\" or \"wav\"
-NSString* text = text_example; // The text you would like to conver to speech.  Be sure to surround with quotes, e.g. \"The quick brown fox jumps over the lazy dog.\"
+CMTextToSpeechRequest* body = [[CMTextToSpeechRequest alloc] init]; // String input request (optional)
 
 CMSpeakApi*apiInstance = [[CMSpeakApi alloc] init];
 
-// Perform text-to-speech on a string
-[apiInstance speakPostWithFormat:format
-              text:text
-          completionHandler: ^(NSObject* output, NSError* error) {
+// Generate audio from text using Advanced AI
+[apiInstance speechSpeakTextVoiceBasicAudioPostWithBody:body
+          completionHandler: ^(NSData* output, NSError* error) {
                         if (output) {
                             NSLog(@"%@", output);
                         }
                         if (error) {
-                            NSLog(@"Error calling CMSpeakApi->speakPost: %@", error);
+                            NSLog(@"Error calling CMSpeakApi->speechSpeakTextVoiceBasicAudioPost: %@", error);
                         }
                     }];
 ```
@@ -50,12 +47,11 @@ CMSpeakApi*apiInstance = [[CMSpeakApi alloc] init];
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **format** | **NSString***| File format to generate response in; possible values are \&quot;mp3\&quot; or \&quot;wav\&quot; | 
- **text** | **NSString***| The text you would like to conver to speech.  Be sure to surround with quotes, e.g. \&quot;The quick brown fox jumps over the lazy dog.\&quot; | 
+ **body** | [**CMTextToSpeechRequest***](CMTextToSpeechRequest.md)| String input request | [optional] 
 
 ### Return type
 
-**NSObject***
+**NSData***
 
 ### Authorization
 
@@ -63,8 +59,8 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
- - **Content-Type**: application/json, text/json, application/xml, text/xml, application/x-www-form-urlencoded
- - **Accept**: application/json, text/json, application/xml, text/xml
+ - **Content-Type**: application/json, text/json, application/_*+json
+ - **Accept**: application/octet-stream
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

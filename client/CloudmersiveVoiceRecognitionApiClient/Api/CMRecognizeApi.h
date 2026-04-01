@@ -23,15 +23,19 @@ extern NSInteger kCMRecognizeApiMissingParamErrorCode;
 
 -(instancetype) initWithApiClient:(CMApiClient *)apiClient NS_DESIGNATED_INITIALIZER;
 
-/// Recognize audio input as text using machine learning
-/// Uses advanced machine learning to convert input audio, which can be mp3 or wav, into text.
+/// Recognize audio input as text using Advanced AI
+/// Uses advanced AI to convert input audio to text. Supports WAV, MP3, M4A, FLAC, OGG, and WMA formats. Consumes 1 API call per second of audio in Fast mode, 5 API calls per second in Normal mode, and 10 API calls per second in Advanced mode.
 ///
-/// @param speechFile Speech file to perform the operation on.  Common file formats such as WAV, MP3 are supported.
+/// @param languageCode ISO 639-3 three-letter language code (e.g. eng, spa, fra). Empty for auto-detect. (optional) (default to )
+/// @param recognitionMode Recognition mode: Fast, Normal (default), or Advanced. Advanced is only available on Private Cloud and Managed Instance deployments. (optional) (default to Normal)
+/// @param speechFile  (optional)
 /// 
 ///  code:200 message:"OK"
 ///
 /// @return CMSpeechRecognitionResult*
--(NSURLSessionTask*) recognizeFileWithSpeechFile: (NSURL*) speechFile
+-(NSURLSessionTask*) speechRecognizeFilePostWithLanguageCode: (NSString*) languageCode
+    recognitionMode: (NSString*) recognitionMode
+    speechFile: (NSURL*) speechFile
     completionHandler: (void (^)(CMSpeechRecognitionResult* output, NSError* error)) handler;
 
 

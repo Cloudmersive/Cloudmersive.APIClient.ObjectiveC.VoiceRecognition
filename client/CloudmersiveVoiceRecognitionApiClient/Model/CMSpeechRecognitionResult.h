@@ -14,6 +14,9 @@
 */
 
 
+#import "CMTokenTimestamp.h"
+@protocol CMTokenTimestamp;
+@class CMTokenTimestamp;
 
 
 
@@ -25,5 +28,8 @@
 /* Recognition result in text format [optional]
  */
 @property(nonatomic) NSString* textResult;
+/* Token-level timestamps with character offsets into TextResult [optional]
+ */
+@property(nonatomic) NSArray<CMTokenTimestamp>* timestamps;
 
 @end

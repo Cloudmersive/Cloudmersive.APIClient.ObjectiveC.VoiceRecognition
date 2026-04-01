@@ -50,25 +50,20 @@ NSInteger kCMRecognizeApiMissingParamErrorCode = 234513;
 #pragma mark - Api Methods
 
 ///
-/// Recognize audio input as text using machine learning
-/// Uses advanced machine learning to convert input audio, which can be mp3 or wav, into text.
-///  @param speechFile Speech file to perform the operation on.  Common file formats such as WAV, MP3 are supported. 
+/// Recognize audio input as text using Advanced AI
+/// Uses advanced AI to convert input audio to text. Supports WAV, MP3, M4A, FLAC, OGG, and WMA formats. Consumes 1 API call per second of audio in Fast mode, 5 API calls per second in Normal mode, and 10 API calls per second in Advanced mode.
+///  @param languageCode ISO 639-3 three-letter language code (e.g. eng, spa, fra). Empty for auto-detect. (optional, default to )
+///
+///  @param recognitionMode Recognition mode: Fast, Normal (default), or Advanced. Advanced is only available on Private Cloud and Managed Instance deployments. (optional, default to Normal)
+///
+///  @param speechFile  (optional)
 ///
 ///  @returns CMSpeechRecognitionResult*
 ///
--(NSURLSessionTask*) recognizeFileWithSpeechFile: (NSURL*) speechFile
+-(NSURLSessionTask*) speechRecognizeFilePostWithLanguageCode: (NSString*) languageCode
+    recognitionMode: (NSString*) recognitionMode
+    speechFile: (NSURL*) speechFile
     completionHandler: (void (^)(CMSpeechRecognitionResult* output, NSError* error)) handler {
-    // verify the required parameter 'speechFile' is set
-    if (speechFile == nil) {
-        NSParameterAssert(speechFile);
-        if(handler) {
-            NSDictionary * userInfo = @{NSLocalizedDescriptionKey : [NSString stringWithFormat:NSLocalizedString(@"Missing required parameter '%@'", nil),@"speechFile"] };
-            NSError* error = [NSError errorWithDomain:kCMRecognizeApiErrorDomain code:kCMRecognizeApiMissingParamErrorCode userInfo:userInfo];
-            handler(nil, error);
-        }
-        return nil;
-    }
-
     NSMutableString* resourcePath = [NSMutableString stringWithFormat:@"/speech/recognize/file"];
 
     NSMutableDictionary *pathParams = [[NSMutableDictionary alloc] init];
@@ -76,8 +71,14 @@ NSInteger kCMRecognizeApiMissingParamErrorCode = 234513;
     NSMutableDictionary* queryParams = [[NSMutableDictionary alloc] init];
     NSMutableDictionary* headerParams = [NSMutableDictionary dictionaryWithDictionary:self.apiClient.configuration.defaultHeaders];
     [headerParams addEntriesFromDictionary:self.defaultHeaders];
+    if (languageCode != nil) {
+        headerParams[@"languageCode"] = languageCode;
+    }
+    if (recognitionMode != nil) {
+        headerParams[@"recognitionMode"] = recognitionMode;
+    }
     // HTTP header `Accept`
-    NSString *acceptHeader = [self.apiClient.sanitizer selectHeaderAccept:@[@"application/json", @"text/json", @"application/xml", @"text/xml"]];
+    NSString *acceptHeader = [self.apiClient.sanitizer selectHeaderAccept:@[@"text/plain", @"application/json", @"text/json"]];
     if(acceptHeader.length > 0) {
         headerParams[@"Accept"] = acceptHeader;
     }

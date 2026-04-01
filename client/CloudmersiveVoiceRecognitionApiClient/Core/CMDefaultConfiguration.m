@@ -28,7 +28,7 @@
 - (instancetype) init {
     self = [super init];
     if (self) {
-        _host = @"https://api.cloudmersive.com";
+        _host = @"https://testapi.cloudmersive.com";
         _username = @"";
         _password = @"";
         _accessToken= @"";
